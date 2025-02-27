@@ -1,30 +1,78 @@
-[gd_scene load_steps=2 format=3 uid="uid://cywpu6lxdjhuu"]
+[gd_scene load_steps=8 format=3 uid="uid://cywpu6lxdjhuu"]
 
 [ext_resource type="Script" uid="uid://bjbrxyy5n8jhp" path="res://src/game/Game.cs" id="1_17mmo"]
+[ext_resource type="PackedScene" uid="uid://c7t0w28il5cpj" path="res://src/player/Player.tscn" id="2_17plf"]
 
-[node name="Control" type="Control"]
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_1yi4v"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_17plf"]
+size = Vector2(100, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n6osq"]
+albedo_color = Color(0.364966, 0.485375, 5.77569e-06, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_17plf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n6osq"]
+
+[node name="Game" type="CanvasLayer"]
+script = ExtResource("1_17mmo")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, -0.637007, 0.770858, 0, -0.770858, -0.637007, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="World"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor"]
+shape = SubResource("WorldBoundaryShape3D_1yi4v")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Floor"]
+mesh = SubResource("PlaneMesh_17plf")
+surface_material_override/0 = SubResource("StandardMaterial3D_n6osq")
+
+[node name="Box" type="StaticBody3D" parent="World/Floor"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0.5, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Floor/Box"]
+mesh = SubResource("BoxMesh_17plf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/Box"]
+shape = SubResource("BoxShape3D_n6osq")
+
+[node name="Box2" type="StaticBody3D" parent="World/Floor"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 2, 0.5, 1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Floor/Box2"]
+mesh = SubResource("BoxMesh_17plf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/Box2"]
+shape = SubResource("BoxShape3D_n6osq")
+
+[node name="Player" parent="World" instance=ExtResource("2_17plf")]
+
+[node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_17mmo")
+mouse_filter = 1
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MainMenu" type="Control" parent="UI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-layout_mode = 2
+[node name="PauseMenu" type="Control" parent="UI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="TestButton" type="Button" parent="CenterContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Test Button"
-
-[connection signal="pressed" from="CenterContainer/VBoxContainer/TestButton" to="." method="OnTestButtonPressed"]
+[node name="HUD" type="Control" parent="UI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
