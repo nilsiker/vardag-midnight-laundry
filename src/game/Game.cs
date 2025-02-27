@@ -4,7 +4,6 @@ using System;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
-using Chickensoft.LogicBlocks;
 using Godot;
 
 public interface IGame : ICanvasLayer { }
@@ -63,25 +62,4 @@ public partial class Game : CanvasLayer, IGame {
 
   #region Output Callbacks
   #endregion
-}
-
-public interface IGameLogic : ILogicBlock<GameLogic.State>;
-
-[Meta]
-[LogicBlock(typeof(State), Diagram = true)]
-public partial class GameLogic
-  : LogicBlock<GameLogic.State>,
-    IGameLogic {
-  public override Transition GetInitialState() => To<State>();
-
-  public static class Input { }
-
-  public static class Output { }
-
-  public partial record State : StateLogic<State> {
-    public State() {
-      OnAttach(() => { });
-      OnDetach(() => { });
-    }
-  }
 }

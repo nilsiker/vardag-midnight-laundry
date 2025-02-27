@@ -1,0 +1,4 @@
+@startuml GameLogic
+state "GameLogic State" as Vardag_GameLogic_State
+[*] --> Vardag_GameLogic_State
+@enduml

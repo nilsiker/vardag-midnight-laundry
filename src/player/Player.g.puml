@@ -1,4 +1,0 @@
-@startuml PlayerLogic
-state "PlayerLogic State" as Vardag_PlayerLogic_State
-[*] --> Vardag_PlayerLogic_State
-@enduml
