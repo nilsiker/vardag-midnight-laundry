@@ -9,7 +9,9 @@
     "coverage/**/*.*",
     ".godot/**/*.*",
     "**/*.tres",
-    "addons/**/*.*"
+    "addons/**/*.*",
+    "**/*.uid",
+    "**/*.puml"
   ],
   "words": [
     "animatable",
