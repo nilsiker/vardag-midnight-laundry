@@ -41,6 +41,7 @@
     "lightmapper",
     "lihop",
     "linecoverage",
+    "Mathf",
     "methodcoverage",
     "missingall",
     "msbuild",

@@ -11,6 +11,7 @@ public interface IPlayer : ICharacterBody3D { }
 [Meta(typeof(IAutoNode))]
 public partial class Player : CharacterBody3D, IPlayer {
   #region Exports
+  [Export] private PlayerSettings Settings { get; set; } = default!;
   #endregion
 
   #region Nodes
@@ -41,6 +42,7 @@ public partial class Player : CharacterBody3D, IPlayer {
       .Handle((in PlayerLogic.Output.UpdateVelocity output) => OnOutputUpdateVelocity(output.Velocity));
 
     Logic.Set(new PlayerLogic.Data());
+    Logic.Set(Settings as IPlayerSettings);
     Logic.Set(Camera);
 
     Logic.Start();
@@ -58,14 +60,14 @@ public partial class Player : CharacterBody3D, IPlayer {
 
   private void OnOutputMove() => MoveAndSlide();
   private void OnOutputLook(Vector3 rotation) {
-    var rot = GlobalRotation;
-    var camRot = Camera.Rotation;
+    var rot = GlobalRotationDegrees;
+    var camRot = Camera.RotationDegrees;
 
     rot.Y = rotation.Y;
     camRot.X = rotation.X;
 
-    Camera.Rotation = camRot;
-    GlobalRotation = rot;
+    Camera.RotationDegrees = camRot;
+    GlobalRotationDegrees = rot;
   }
   #endregion
 
@@ -88,7 +90,7 @@ public partial class Player : CharacterBody3D, IPlayer {
 
   public override void _UnhandledInput(InputEvent @event) {
     if (@event is InputEventMouseMotion motion) {
-      Look(motion.Velocity);
+      Look(motion.ScreenRelative);
     }
   }
 

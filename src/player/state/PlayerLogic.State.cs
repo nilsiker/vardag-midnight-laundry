@@ -13,30 +13,34 @@ public partial class PlayerLogic {
 
     public Transition On(in Input.RequestLook input) {
       var data = Get<Data>();
+      var settings = Get<IPlayerSettings>();
 
       // TODO have these be separate floats instead?
-      data.LookRotation.X -= input.Rotation.Y * 0.0001f;
-      data.LookRotation.Y -= input.Rotation.X * 0.0001f;
+      data.LookRotation.X = Mathf.Clamp(data.LookRotation.X - (input.Rotation.Y * settings.LookSensitivity), settings.MinViewAngle, settings.MaxViewAngle);
+      data.LookRotation.Y -= input.Rotation.X * settings.LookSensitivity;
 
       Output(new Output.Look(data.LookRotation));
       return ToSelf();
     }
+
     public Transition On(in Input.RequestMove input) {
       var data = Get<Data>();
+      var settings = Get<IPlayerSettings>();
       var camera = Get<ICamera3D>();
 
       var right = camera.GlobalBasis.X * input.Direction.X;
       var forward = camera.GlobalBasis.X.Cross(Vector3.Up) * input.Direction.Y;
 
-      data.DesiredVelocity = (right + forward) * 5f;
+      data.DesiredVelocity = (right + forward) * settings.MaxSpeed;
 
       return ToSelf();
     }
 
     public Transition On(in Input.PhysicsTick input) {
       var data = Get<Data>();
+      var settings = Get<IPlayerSettings>();
 
-      data.Velocity = data.Velocity.MoveToward(data.DesiredVelocity, input.Delta * 10f);
+      data.Velocity = data.Velocity.MoveToward(data.DesiredVelocity, input.Delta * settings.Acceleration);
 
       Output(new Output.UpdateVelocity(data.Velocity));
       Output(new Output.Move());
