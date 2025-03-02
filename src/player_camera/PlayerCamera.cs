@@ -20,6 +20,7 @@ public partial class PlayerCamera : Node3D, IPlayerCamera {
   private Tween? _bobTween;
 
   #region Exports
+  [Export] private PlayerCameraSettings Settings { get; set; } = default!;
   [Export]
   private float Height {
     get => Camera?.Position.Y ?? 0;
@@ -53,12 +54,13 @@ public partial class PlayerCamera : Node3D, IPlayerCamera {
 
     // Bind functions to state outputs here
     Binding
-      .Handle((in PlayerCameraLogic.Output.UpdateFov output) => OnOutputUpdateFov(output.Fov))
-      .Handle((in PlayerCameraLogic.Output.Tilt output) => OnOutputTilt(output.Direction))
-      .Handle((in PlayerCameraLogic.Output.Bob output) => OnOutputBob(output.Bobbing));
+      .Handle((in PlayerCameraLogic.Output.UpdateFov output) => OnOutputUpdateFov(output.Fov, output.Speed))
+      .Handle((in PlayerCameraLogic.Output.Tilt output) => OnOutputTilt(output.Direction, output.Intensity, output.Speed))
+      .Handle((in PlayerCameraLogic.Output.Bob output) => OnOutputBob(output.Bobbing, output.Intensity, output.Speed));
 
 
     Logic.Set(new PlayerCameraLogic.Data());
+    Logic.Set(Settings as IPlayerCameraSettings);
     Logic.Start();
   }
 
@@ -97,41 +99,41 @@ public partial class PlayerCamera : Node3D, IPlayerCamera {
 
 
   #region Output Callbacks
-  public void OnOutputUpdateFov(float fov) {
+  public void OnOutputUpdateFov(float fov, float speed) {
     this.ResetTween(ref _focusTween);
 
-    _focusTween.TweenProperty(Camera, "fov", fov, 0.4f)
+    _focusTween.TweenProperty(Camera, "fov", fov, speed)
       .SetEase(Tween.EaseType.InOut)
       .SetTrans(Tween.TransitionType.Quad);
   }
 
-  public void OnOutputBob(bool bobbing) {
+  public void OnOutputBob(bool bobbing, float intensity, float speed) {
     // TODO replace with anim further down the line?
     this.ResetTween(ref _bobTween);
     if (bobbing) {
       _bobTween
-        .TweenProperty(TiltNode, "position:y", 0.05, 0.25f)
+        .TweenProperty(TiltNode, "position:y", intensity, speed)
         .SetEase(Tween.EaseType.InOut);
       _bobTween
-        .TweenProperty(TiltNode, "position:y", -0.05, 0.25f)
+        .TweenProperty(TiltNode, "position:y", -intensity, speed)
         .SetEase(Tween.EaseType.InOut);
       _bobTween.SetLoops();
     }
     else {
-      _bobTween.TweenProperty(TiltNode, "position:y", 0, 0.25f);
+      _bobTween.TweenProperty(TiltNode, "position:y", 0, speed);
     }
   }
 
-  private void OnOutputTilt(Vector2 direction) {
+  private void OnOutputTilt(Vector2 direction, float intensity, float speed) {
     this.ResetTween(ref _tiltTween);
 
     _tiltTween
-      .TweenProperty(TiltNode, "rotation_degrees:z", -direction.X, 0.5f)
+      .TweenProperty(TiltNode, "rotation_degrees:z", -direction.X * intensity, speed)
       .SetEase(Tween.EaseType.InOut);
 
     _tiltTween
       .Parallel()
-      .TweenProperty(TiltNode, "rotation_degrees:x", direction.Y, 0.5f)
+      .TweenProperty(TiltNode, "rotation_degrees:x", direction.Y * intensity, speed)
       .SetTrans(Tween.TransitionType.Quad)
       .SetEase(Tween.EaseType.InOut);
   }

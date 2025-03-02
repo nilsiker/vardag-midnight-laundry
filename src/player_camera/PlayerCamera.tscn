@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvx64w3x27qea"]
+[gd_scene load_steps=3 format=3 uid="uid://bvx64w3x27qea"]
 
 [ext_resource type="Script" uid="uid://byjpi2quid2h6" path="res://src/player_camera/PlayerCamera.cs" id="1_loes5"]
+[ext_resource type="Resource" uid="uid://d0aj8e62q038l" path="res://src/player_camera/player_camera_default_settings.tres" id="2_p6mf4"]
 
 [node name="PlayerCamera" type="Node3D"]
 script = ExtResource("1_loes5")
+Settings = ExtResource("2_p6mf4")
 Height = 1.5
 
 [node name="TiltNode" type="Node3D" parent="."]

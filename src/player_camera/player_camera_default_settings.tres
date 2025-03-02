@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="PlayerCameraSettings" load_steps=2 format=3 uid="uid://d0aj8e62q038l"]
+
+[ext_resource type="Script" uid="uid://dunv324g8gvhr" path="res://src/player_camera/PlayerCameraSettings.cs" id="1_eoqur"]
+
+[resource]
+script = ExtResource("1_eoqur")
+BobIntensity = 0.05
+BobSpeed = 0.25
+TiltIntensity = 1.0
+TiltSpeed = 0.25
+Fov = 75.0
+ZoomedFov = 40.0
+ZoomSpeed = 0.4
+metadata/_custom_type_script = "uid://dunv324g8gvhr"
