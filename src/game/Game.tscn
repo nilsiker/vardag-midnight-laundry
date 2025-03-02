@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://cywpu6lxdjhuu"]
+[gd_scene load_steps=13 format=3 uid="uid://cywpu6lxdjhuu"]
 
 [ext_resource type="Script" uid="uid://bjbrxyy5n8jhp" path="res://src/game/Game.cs" id="1_17mmo"]
 [ext_resource type="PackedScene" uid="uid://c7t0w28il5cpj" path="res://src/player/Player.tscn" id="2_17plf"]
 [ext_resource type="Shader" uid="uid://cf4yqaklqjhxv" path="res://src/shaders/dithering/main.gdshader" id="3_dxb18"]
+[ext_resource type="PackedScene" uid="uid://bnbe24n0v2qss" path="res://src/hud/HUD.tscn" id="5_dxb18"]
 [ext_resource type="Material" uid="uid://cxwdtgr6cy2w8" path="res://src/wall/visuals/brick.tres" id="5_oijqn"]
-[ext_resource type="PackedScene" uid="uid://dlv7c086j0ewr" path="res://src/ui_state_debug_display/StateDebugDisplay.tscn" id="6_dxb18"]
+[ext_resource type="PackedScene" uid="uid://3mwky8ciwtjk" path="res://src/pause_menu/PauseMenu.tscn" id="5_yw8km"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yw8km"]
 shader = ExtResource("3_dxb18")
@@ -97,41 +98,25 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="MainMenu" type="Control" parent="UI"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="PauseMenu" type="Control" parent="UI"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PauseMenu" parent="UI" instance=ExtResource("5_yw8km")]
+visible = false
+layout_mode = 1
 
-[node name="HUD" type="Control" parent="UI"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="DebugPanel" type="PanelContainer" parent="UI/HUD"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Margins" type="MarginContainer" parent="UI/HUD/DebugPanel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Contents" type="VBoxContainer" parent="UI/HUD/DebugPanel/Margins"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="UI/HUD/DebugPanel/Margins/Contents"]
-layout_mode = 2
-text = "Debug"
-
-[node name="TitleSeparator" type="HSeparator" parent="UI/HUD/DebugPanel/Margins/Contents"]
-layout_mode = 2
-
-[node name="StateDebugDisplay" parent="UI/HUD/DebugPanel/Margins/Contents" instance=ExtResource("6_dxb18")]
-layout_mode = 2
+[node name="HUD" parent="UI" instance=ExtResource("5_dxb18")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

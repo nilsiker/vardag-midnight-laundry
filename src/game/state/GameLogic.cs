@@ -9,5 +9,5 @@ public interface IGameLogic : ILogicBlock<GameLogic.State>;
 public partial class GameLogic
   : LogicBlock<GameLogic.State>,
     IGameLogic {
-  public override Transition GetInitialState() => To<State>();
+  public override Transition GetInitialState() => To<State.Playing>();
 }

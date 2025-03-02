@@ -80,8 +80,8 @@ public partial class PlayerCamera : Node3D, IPlayerCamera {
   public void OnPhysicsProcess(double delta) { }
 
   public void OnExitTree() {
-    Logic.Stop();
-    Binding.Dispose();
+    Logic?.Stop();
+    Binding?.Dispose();
   }
   #endregion
 

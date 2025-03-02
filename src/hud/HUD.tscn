@@ -1,0 +1,34 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnbe24n0v2qss"]
+
+[ext_resource type="PackedScene" uid="uid://dlv7c086j0ewr" path="res://src/ui_state_debug_display/StateDebugDisplay.tscn" id="1_wnsa3"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DebugPanel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Margins" type="MarginContainer" parent="DebugPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Contents" type="VBoxContainer" parent="DebugPanel/Margins"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="DebugPanel/Margins/Contents"]
+layout_mode = 2
+text = "Debug"
+
+[node name="TitleSeparator" type="HSeparator" parent="DebugPanel/Margins/Contents"]
+layout_mode = 2
+
+[node name="StateDebugDisplay" parent="DebugPanel/Margins/Contents" instance=ExtResource("1_wnsa3")]
+layout_mode = 2

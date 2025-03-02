@@ -30,20 +30,24 @@ public partial class StateDebugDisplay : HBoxContainer {
       return;
     }
 
-    _.EntityName.Text = NodesInStateGroup.First().Name;
-    _.EntityState.Text = NodesInStateGroup.First().State;
+    _.EntityName.Text = NodesInStateGroup.ElementAtOrDefault(_index)?.Name;
+    _.EntityState.Text = NodesInStateGroup.ElementAtOrDefault(_index)?.State;
   }
 
 
   public override void _Input(InputEvent @event) {
+    if (@event.IsReleased()) {
+      return;
+    }
+
     if (@event is InputEventKey key) {
       if (key.Keycode == Key.Pageup) {
-        _index++;
-        _index = Math.Min(0, NodesInStateGroup.Count());
+        _index = Math.Min(_index + 1, NodesInStateGroup.Count() - 1);
       }
       else if (key.Keycode == Key.Pagedown) {
         _index = Math.Max(0, _index - 1);
       }
     }
+    GD.Print(_index);
   }
 }

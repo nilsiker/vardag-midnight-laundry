@@ -1,7 +1,6 @@
 namespace Vardag;
 
 using Chickensoft.LogicBlocks;
-using Godot;
 
 public partial class PlayerCameraLogic {
   public partial record State : StateLogic<State>, IGet<Input.Focus>, IGet<Input.Unfocus>, IGet<Input.Tilt> {

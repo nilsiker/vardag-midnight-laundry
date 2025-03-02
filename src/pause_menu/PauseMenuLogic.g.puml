@@ -1,0 +1,4 @@
+@startuml PauseMenuLogic
+state "PauseMenuLogic State" as Vardag_PauseMenuLogic_State
+[*] --> Vardag_PauseMenuLogic_State
+@enduml
