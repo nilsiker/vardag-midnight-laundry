@@ -1,10 +1,22 @@
-[gd_scene load_steps=11 format=3 uid="uid://cywpu6lxdjhuu"]
+[gd_scene load_steps=12 format=3 uid="uid://cywpu6lxdjhuu"]
 
 [ext_resource type="Script" uid="uid://bjbrxyy5n8jhp" path="res://src/game/Game.cs" id="1_17mmo"]
 [ext_resource type="PackedScene" uid="uid://c7t0w28il5cpj" path="res://src/player/Player.tscn" id="2_17plf"]
-[ext_resource type="Material" uid="uid://dcgqd4r7xk7k2" path="res://src/shaders/dithering/material_colored_dithering.tres" id="3_kxp7u"]
+[ext_resource type="Shader" uid="uid://cf4yqaklqjhxv" path="res://src/shaders/dithering/main.gdshader" id="3_dxb18"]
 [ext_resource type="Material" uid="uid://cxwdtgr6cy2w8" path="res://src/wall/visuals/brick.tres" id="5_oijqn"]
 [ext_resource type="PackedScene" uid="uid://dlv7c086j0ewr" path="res://src/ui_state_debug_display/StateDebugDisplay.tscn" id="6_dxb18"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yw8km"]
+shader = ExtResource("3_dxb18")
+shader_parameter/quantize_size = 4.0
+shader_parameter/handle_scale = false
+shader_parameter/dither_enabled = true
+shader_parameter/bayer_pattern = 3.0
+shader_parameter/divisions = 16.0
+shader_parameter/contrast = 1.0
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = false
+shader_parameter/use_palette = false
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_17plf"]
 
@@ -32,7 +44,7 @@ size = Vector3(5.935, 2.2, 1.4)
 script = ExtResource("1_17mmo")
 
 [node name="Dithering" type="ColorRect" parent="."]
-material = ExtResource("3_kxp7u")
+material = SubResource("ShaderMaterial_yw8km")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

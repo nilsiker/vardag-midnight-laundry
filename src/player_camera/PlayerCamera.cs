@@ -5,18 +5,30 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IPlayerCamera : ICamera3D {
+public interface IPlayerCamera : INode3D {
   public void Focus();
   public void Unfocus();
+  public void SetPitch(float pitch);
   public void Tilt(Vector2 direction);
 }
 
+[Tool, SceneTree]
 [Meta(typeof(IAutoNode))]
-public partial class PlayerCamera : Camera3D, IPlayerCamera {
+public partial class PlayerCamera : Node3D, IPlayerCamera {
   private Tween? _focusTween;
   private Tween? _tiltTween;
+  private Tween? _bobTween;
 
   #region Exports
+  [Export]
+  private float Height {
+    get => Camera?.Position.Y ?? 0;
+    set {
+      if (Camera is not null) {
+        Camera.Position = Camera.Position with { Y = value };
+      }
+    }
+  }
   #endregion
 
   #region Nodes
@@ -42,8 +54,11 @@ public partial class PlayerCamera : Camera3D, IPlayerCamera {
     // Bind functions to state outputs here
     Binding
       .Handle((in PlayerCameraLogic.Output.UpdateFov output) => OnOutputUpdateFov(output.Fov))
-      .Handle((in PlayerCameraLogic.Output.Tilt output) => OnOutputTilt(output.Direction));
+      .Handle((in PlayerCameraLogic.Output.Tilt output) => OnOutputTilt(output.Direction))
+      .Handle((in PlayerCameraLogic.Output.Bob output) => OnOutputBob(output.Bobbing));
 
+
+    Logic.Set(new PlayerCameraLogic.Data());
     Logic.Start();
   }
 
@@ -72,23 +87,53 @@ public partial class PlayerCamera : Camera3D, IPlayerCamera {
   public void Focus() => Logic.Input(new PlayerCameraLogic.Input.Focus());
   public void Unfocus() => Logic.Input(new PlayerCameraLogic.Input.Unfocus());
   public void Tilt(Vector2 direction) => Logic.Input(new PlayerCameraLogic.Input.Tilt(direction));
+  public void SetPitch(float pitch) {
+    var camRot = Camera.RotationDegrees;
+    camRot.X = pitch;
+    Camera.RotationDegrees = camRot;
+  }
+
   #endregion
+
 
   #region Output Callbacks
   public void OnOutputUpdateFov(float fov) {
     this.ResetTween(ref _focusTween);
 
-    _focusTween.TweenProperty(this, "fov", fov, 0.4f)
+    _focusTween.TweenProperty(Camera, "fov", fov, 0.4f)
       .SetEase(Tween.EaseType.InOut)
       .SetTrans(Tween.TransitionType.Quad);
+  }
+
+  public void OnOutputBob(bool bobbing) {
+    // TODO replace with anim further down the line?
+    this.ResetTween(ref _bobTween);
+    if (bobbing) {
+      _bobTween
+        .TweenProperty(TiltNode, "position:y", 0.05, 0.25f)
+        .SetEase(Tween.EaseType.InOut);
+      _bobTween
+        .TweenProperty(TiltNode, "position:y", -0.05, 0.25f)
+        .SetEase(Tween.EaseType.InOut);
+      _bobTween.SetLoops();
+    }
+    else {
+      _bobTween.TweenProperty(TiltNode, "position:y", 0, 0.25f);
+    }
   }
 
   private void OnOutputTilt(Vector2 direction) {
     this.ResetTween(ref _tiltTween);
 
-    _tiltTween.TweenProperty(this, "fov", direction, 0.4f)
-      .SetEase(Tween.EaseType.InOut)
-      .SetTrans(Tween.TransitionType.Quad);
+    _tiltTween
+      .TweenProperty(TiltNode, "rotation_degrees:z", -direction.X, 0.5f)
+      .SetEase(Tween.EaseType.InOut);
+
+    _tiltTween
+      .Parallel()
+      .TweenProperty(TiltNode, "rotation_degrees:x", direction.Y, 0.5f)
+      .SetTrans(Tween.TransitionType.Quad)
+      .SetEase(Tween.EaseType.InOut);
   }
   #endregion
 }

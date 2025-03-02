@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bvx64w3x27qea"]
+
+[ext_resource type="Script" uid="uid://byjpi2quid2h6" path="res://src/player_camera/PlayerCamera.cs" id="1_loes5"]
+
+[node name="PlayerCamera" type="Node3D"]
+script = ExtResource("1_loes5")
+Height = 1.5
+
+[node name="TiltNode" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera3D" parent="TiltNode"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="TiltNode/Camera"]
+spot_range = 10.8983
+spot_angle = 35.0

@@ -1,6 +1,5 @@
 namespace Vardag;
 
-using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.LogicBlocks;
 using Godot;
 
@@ -19,7 +18,7 @@ public partial class PlayerLogic {
         public Transition On(in Input.RequestMove input) {
           var data = Get<Data>();
           var settings = Get<IPlayerSettings>();
-          var camera = Get<ICamera3D>();
+          var camera = Get<IPlayerCamera>();
 
           var right = camera.GlobalBasis.X * input.Direction.X;
           var forward = camera.GlobalBasis.X.Cross(Vector3.Up) * input.Direction.Y;

@@ -6,5 +6,6 @@ public partial class PlayerCameraLogic {
   public static class Output {
     public record struct UpdateFov(float Fov);
     public record struct Tilt(Vector2 Direction);
+    public record struct Bob(bool Bobbing);
   }
 }

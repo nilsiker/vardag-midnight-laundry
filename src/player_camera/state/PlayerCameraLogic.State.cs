@@ -1,4 +1,5 @@
 namespace Vardag;
+
 using Chickensoft.LogicBlocks;
 
 public partial class PlayerCameraLogic {
@@ -19,7 +20,18 @@ public partial class PlayerCameraLogic {
     }
 
     public Transition On(in Input.Tilt input) {
-      Output(new Output.Tilt(input.Direction));
+      // TODO split tilt components into separate floats?
+      var data = Get<Data>();
+      var newTilt = input.Direction * 5f;
+
+      if (!newTilt.IsEqualApprox(data.Tilt)) {
+        Output(new Output.Tilt(newTilt));
+        data.Tilt = newTilt;
+
+        // TODO handle in own input?
+        Output(new Output.Bob(!newTilt.IsZeroApprox()));
+      }
+
       return ToSelf();
     }
   }

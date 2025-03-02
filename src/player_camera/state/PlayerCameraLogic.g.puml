@@ -6,7 +6,7 @@ Vardag_PlayerCameraLogic_State --> Vardag_PlayerCameraLogic_State : Tilt
 Vardag_PlayerCameraLogic_State --> Vardag_PlayerCameraLogic_State : Unfocus
 
 Vardag_PlayerCameraLogic_State : OnFocus → UpdateFov
-Vardag_PlayerCameraLogic_State : OnTilt → Tilt
+Vardag_PlayerCameraLogic_State : OnTilt → Bob, Tilt
 Vardag_PlayerCameraLogic_State : OnUnfocus → UpdateFov
 
 [*] --> Vardag_PlayerCameraLogic_State

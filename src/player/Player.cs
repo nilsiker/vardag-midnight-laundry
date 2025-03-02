@@ -47,7 +47,7 @@ public partial class Player : CharacterBody3D, IPlayer {
 
     Logic.Set(new PlayerLogic.Data());
     Logic.Set(Settings as IPlayerSettings);
-    Logic.Set(PlayerCamera as ICamera3D);
+    Logic.Set(PlayerCamera);
 
     Logic.Start();
   }
@@ -65,13 +65,14 @@ public partial class Player : CharacterBody3D, IPlayer {
 
   private Tween? _tween;
   private void OnOutputMove() {
-    // TODO move this to camera logic
-    var camPivot = GetNode<Node3D>("CamPivot");
-    if (_tween is not null && _tween.IsRunning()) {
-      _tween.Kill();
-    }
-    _tween = CreateTween();
-    _tween.TweenProperty(camPivot, "rotation_degrees:z", -Input.GetAxis(Left, Right) * 2.5, .25);
+    // // TODO move this to camera logic
+    // var camPivot = GetNode<Node3D>("CamPivot");
+    // if (_tween is not null && _tween.IsRunning()) {
+    //   _tween.Kill();
+    // }
+    // _tween = CreateTween();
+    // _tween.TweenProperty(camPivot, "rotation_degrees:z", -Input.GetAxis(Left, Right) * 2.5, .25);
+    PlayerCamera.Tilt(Input.GetVector(Left, Right, Forward, Backward));
 
     MoveAndSlide();
   }
@@ -79,13 +80,10 @@ public partial class Player : CharacterBody3D, IPlayer {
 
   private void OnOutputLook(Vector3 rotation) {
     var rot = GlobalRotationDegrees;
-    var camRot = PlayerCamera.RotationDegrees;
-
     rot.Y = rotation.Y;
-    camRot.X = rotation.X;
-
-    PlayerCamera.RotationDegrees = camRot;
     GlobalRotationDegrees = rot;
+
+    PlayerCamera.SetPitch(rotation.X);
   }
   #endregion
 
