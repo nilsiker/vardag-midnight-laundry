@@ -1,7 +1,5 @@
 namespace Vardag;
 
-using System;
-
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
@@ -78,7 +76,7 @@ public partial class PlayerCamera : Camera3D, IPlayerCamera {
 
   #region Output Callbacks
   public void OnOutputUpdateFov(float fov) {
-    this.ResetTween(_focusTween);
+    this.ResetTween(ref _focusTween);
 
     _focusTween.TweenProperty(this, "fov", fov, 0.4f)
       .SetEase(Tween.EaseType.InOut)
@@ -86,7 +84,7 @@ public partial class PlayerCamera : Camera3D, IPlayerCamera {
   }
 
   private void OnOutputTilt(Vector2 direction) {
-    this.ResetTween(_tiltTween);
+    this.ResetTween(ref _tiltTween);
 
     _tiltTween.TweenProperty(this, "fov", direction, 0.4f)
       .SetEase(Tween.EaseType.InOut)
