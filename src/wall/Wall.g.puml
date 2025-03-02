@@ -1,0 +1,4 @@
+@startuml WallLogic
+state "WallLogic State" as Vardag_WallLogic_State
+[*] --> Vardag_WallLogic_State
+@enduml

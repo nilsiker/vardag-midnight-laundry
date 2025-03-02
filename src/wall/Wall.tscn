@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://4434rielxh4a"]
+
+[ext_resource type="Script" uid="uid://bvik8xd5kymoq" path="res://src/wall/Wall.cs" id="1_1l8ue"]
+[ext_resource type="Material" uid="uid://cxwdtgr6cy2w8" path="res://src/wall/visuals/brick.tres" id="2_xw0ij"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1l8ue"]
+size = Vector3(5.09, 2.075, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xw0ij"]
+
+[node name="Wall" type="Node3D"]
+script = ExtResource("1_1l8ue")
+Measurements = Vector3(5.09, 2.075, 0.05)
+Material = ExtResource("2_xw0ij")
+
+[node name="WallMesh" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0375, 0)
+mesh = SubResource("BoxMesh_1l8ue")
+material = ExtResource("2_xw0ij")
+
+[node name="WindowHole" type="CSGMesh3D" parent="WallMesh"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+operation = 2
+mesh = SubResource("BoxMesh_xw0ij")

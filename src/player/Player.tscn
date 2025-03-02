@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://c7t0w28il5cpj"]
+[gd_scene load_steps=7 format=3 uid="uid://c7t0w28il5cpj"]
 
 [ext_resource type="Script" uid="uid://bip8hcvy0nogr" path="res://src/player/Player.cs" id="1_tehm3"]
 [ext_resource type="Script" uid="uid://box4nn8ojrdfo" path="res://src/player/PlayerSettings.cs" id="2_chb7w"]
+[ext_resource type="Script" uid="uid://byjpi2quid2h6" path="res://src/player_camera/PlayerCamera.cs" id="3_g641l"]
 
 [sub_resource type="Resource" id="Resource_g641l"]
 script = ExtResource("2_chb7w")
@@ -20,10 +21,6 @@ metadata/_custom_type_script = "uid://box4nn8ojrdfo"
 script = ExtResource("1_tehm3")
 Settings = SubResource("Resource_g641l")
 
-[node name="Camera" type="Camera3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_1yi4v")
@@ -31,3 +28,14 @@ shape = SubResource("CapsuleShape3D_1yi4v")
 [node name="CSGMesh3D" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_1yi4v")
+
+[node name="CamPivot" type="Node3D" parent="."]
+
+[node name="PlayerCamera" type="Camera3D" parent="CamPivot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+script = ExtResource("3_g641l")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="CamPivot/PlayerCamera"]
+spot_range = 10.8983
+spot_angle = 35.0

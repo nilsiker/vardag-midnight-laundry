@@ -1,57 +1,79 @@
-[gd_scene load_steps=8 format=3 uid="uid://cywpu6lxdjhuu"]
+[gd_scene load_steps=11 format=3 uid="uid://cywpu6lxdjhuu"]
 
 [ext_resource type="Script" uid="uid://bjbrxyy5n8jhp" path="res://src/game/Game.cs" id="1_17mmo"]
 [ext_resource type="PackedScene" uid="uid://c7t0w28il5cpj" path="res://src/player/Player.tscn" id="2_17plf"]
+[ext_resource type="Material" uid="uid://dcgqd4r7xk7k2" path="res://src/shaders/dithering/material_colored_dithering.tres" id="3_kxp7u"]
+[ext_resource type="Material" uid="uid://cxwdtgr6cy2w8" path="res://src/wall/visuals/brick.tres" id="5_oijqn"]
+[ext_resource type="PackedScene" uid="uid://dlv7c086j0ewr" path="res://src/ui_state_debug_display/StateDebugDisplay.tscn" id="6_dxb18"]
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_1yi4v"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_17plf"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_17plf"]
-size = Vector2(100, 100)
+[sub_resource type="Sky" id="Sky_n6osq"]
+sky_material = SubResource("ProceduralSkyMaterial_17plf")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n6osq"]
-albedo_color = Color(0.364966, 0.485375, 5.77569e-06, 1)
+[sub_resource type="Environment" id="Environment_kxp7u"]
+background_mode = 2
+sky = SubResource("Sky_n6osq")
+ambient_light_source = 3
+ambient_light_sky_contribution = 0.2
+reflected_light_source = 2
+tonemap_mode = 1
+fog_enabled = true
+fog_light_color = Color(0, 0, 0, 1)
+fog_density = 0.1
 
-[sub_resource type="BoxMesh" id="BoxMesh_17plf"]
+[sub_resource type="BoxMesh" id="BoxMesh_oijqn"]
+size = Vector3(5, 2.5, 5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_n6osq"]
+[sub_resource type="BoxMesh" id="BoxMesh_dxb18"]
+size = Vector3(5.935, 2.2, 1.4)
 
 [node name="Game" type="CanvasLayer"]
 script = ExtResource("1_17mmo")
 
+[node name="Dithering" type="ColorRect" parent="."]
+material = ExtResource("3_kxp7u")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kxp7u")
+
 [node name="World" type="Node3D" parent="."]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="World"]
-transform = Transform3D(1, 0, 0, 0, -0.637007, 0.770858, 0, -0.770858, -0.637007, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, 0.0508373, 0.998707, 0, -0.998707, 0.0508373, 1, 2.22217e-09, 4.36549e-08, 0, 0, 0)
+visible = false
+light_color = Color(0.956983, 0.864652, 0.924256, 1)
+light_energy = 0.25
 shadow_enabled = true
-
-[node name="Floor" type="StaticBody3D" parent="World"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor"]
-shape = SubResource("WorldBoundaryShape3D_1yi4v")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Floor"]
-mesh = SubResource("PlaneMesh_17plf")
-surface_material_override/0 = SubResource("StandardMaterial3D_n6osq")
-
-[node name="Box" type="StaticBody3D" parent="World/Floor"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0.5, -3)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Floor/Box"]
-mesh = SubResource("BoxMesh_17plf")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/Box"]
-shape = SubResource("BoxShape3D_n6osq")
-
-[node name="Box2" type="StaticBody3D" parent="World/Floor"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 2, 0.5, 1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Floor/Box2"]
-mesh = SubResource("BoxMesh_17plf")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Floor/Box2"]
-shape = SubResource("BoxShape3D_n6osq")
+directional_shadow_mode = 1
 
 [node name="Player" parent="World" instance=ExtResource("2_17plf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00821143, 0.487338)
+
+[node name="ClothesRoom" type="CSGMesh3D" parent="World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+use_collision = true
+flip_faces = true
+mesh = SubResource("BoxMesh_oijqn")
+material = ExtResource("5_oijqn")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="World/ClothesRoom"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.64621, -0.060295, 0)
+flip_faces = true
+mesh = SubResource("BoxMesh_dxb18")
+material = ExtResource("5_oijqn")
+
+[node name="ClothesRoom" type="CSGMesh3D" parent="World/ClothesRoom/CSGMesh3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1, 0.0999999, 1.6)
+use_collision = true
+flip_faces = true
+mesh = SubResource("BoxMesh_oijqn")
+material = ExtResource("5_oijqn")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -76,3 +98,28 @@ offset_bottom = 40.0
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="DebugPanel" type="PanelContainer" parent="UI/HUD"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Margins" type="MarginContainer" parent="UI/HUD/DebugPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Contents" type="VBoxContainer" parent="UI/HUD/DebugPanel/Margins"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/HUD/DebugPanel/Margins/Contents"]
+layout_mode = 2
+text = "Debug"
+
+[node name="TitleSeparator" type="HSeparator" parent="UI/HUD/DebugPanel/Margins/Contents"]
+layout_mode = 2
+
+[node name="StateDebugDisplay" parent="UI/HUD/DebugPanel/Margins/Contents" instance=ExtResource("6_dxb18")]
+layout_mode = 2

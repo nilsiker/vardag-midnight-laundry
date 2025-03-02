@@ -5,7 +5,7 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IPlayer : ICharacterBody3D { }
+public interface IPlayer : ICharacterBody3D, IStateInfo { }
 
 [InputMap]
 [Meta(typeof(IAutoNode))]
@@ -15,7 +15,7 @@ public partial class Player : CharacterBody3D, IPlayer {
   #endregion
 
   #region Nodes
-  [Node] private ICamera3D Camera { get; set; } = default!;
+  [Node] private IPlayerCamera PlayerCamera { get; set; } = default!;
   #endregion
 
   #region Provisions
@@ -27,7 +27,11 @@ public partial class Player : CharacterBody3D, IPlayer {
   #region State
   private PlayerLogic Logic { get; set; } = default!;
   private PlayerLogic.IBinding Binding { get; set; } = default!;
+
+  string IStateInfo.Name => Name;
+  public string State => Logic.Value.ToString();
   #endregion
+
 
   #region Dependency Lifecycle
   public void Setup() => Logic = new();
@@ -43,7 +47,7 @@ public partial class Player : CharacterBody3D, IPlayer {
 
     Logic.Set(new PlayerLogic.Data());
     Logic.Set(Settings as IPlayerSettings);
-    Logic.Set(Camera);
+    Logic.Set(PlayerCamera as ICamera3D);
 
     Logic.Start();
   }
@@ -58,15 +62,29 @@ public partial class Player : CharacterBody3D, IPlayer {
   #region Output Callbacks
   private void OnOutputUpdateVelocity(Vector3 velocity) => Velocity = velocity;
 
-  private void OnOutputMove() => MoveAndSlide();
+
+  private Tween? _tween;
+  private void OnOutputMove() {
+    // TODO move this to camera logic
+    var camPivot = GetNode<Node3D>("CamPivot");
+    if (_tween is not null && _tween.IsRunning()) {
+      _tween.Kill();
+    }
+    _tween = CreateTween();
+    _tween.TweenProperty(camPivot, "rotation_degrees:z", -Input.GetAxis(Left, Right) * 2.5, .25);
+
+    MoveAndSlide();
+  }
+
+
   private void OnOutputLook(Vector3 rotation) {
     var rot = GlobalRotationDegrees;
-    var camRot = Camera.RotationDegrees;
+    var camRot = PlayerCamera.RotationDegrees;
 
     rot.Y = rotation.Y;
     camRot.X = rotation.X;
 
-    Camera.RotationDegrees = camRot;
+    PlayerCamera.RotationDegrees = camRot;
     GlobalRotationDegrees = rot;
   }
   #endregion
@@ -79,6 +97,7 @@ public partial class Player : CharacterBody3D, IPlayer {
     SetPhysicsProcess(true);
 
     Input.MouseMode = Input.MouseModeEnum.Captured;
+    AddToGroup("state");
   }
 
   public void OnProcess(double delta) { }
@@ -91,6 +110,14 @@ public partial class Player : CharacterBody3D, IPlayer {
   public override void _UnhandledInput(InputEvent @event) {
     if (@event is InputEventMouseMotion motion) {
       Look(motion.ScreenRelative);
+    }
+    else if (@event.IsAction(Focus)) {
+      if (@event.IsPressed()) {
+        PlayerCamera.Focus();
+      }
+      else {
+        PlayerCamera.Unfocus();
+      }
     }
   }
 

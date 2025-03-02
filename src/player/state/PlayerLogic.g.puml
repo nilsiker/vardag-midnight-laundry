@@ -1,12 +1,27 @@
 @startuml PlayerLogic
-state "PlayerLogic State" as Vardag_PlayerLogic_State
+state "PlayerLogic State" as Vardag_PlayerLogic_State {
+  state "Alive" as Vardag_PlayerLogic_State_Alive {
+    state "Falling" as Vardag_PlayerLogic_State_Alive_Falling
+    state "Grounded" as Vardag_PlayerLogic_State_Alive_Grounded {
+      state "Idle" as Vardag_PlayerLogic_State_Alive_Grounded_Idle
+      state "Moving" as Vardag_PlayerLogic_State_Alive_Grounded_Moving
+    }
+  }
+}
 
 Vardag_PlayerLogic_State --> Vardag_PlayerLogic_State : PhysicsTick
 Vardag_PlayerLogic_State --> Vardag_PlayerLogic_State : RequestLook
-Vardag_PlayerLogic_State --> Vardag_PlayerLogic_State : RequestMove
+Vardag_PlayerLogic_State_Alive_Falling --> Vardag_PlayerLogic_State_Alive_Falling : CheckGrounded
+Vardag_PlayerLogic_State_Alive_Falling --> Vardag_PlayerLogic_State_Alive_Falling : PhysicsTick
+Vardag_PlayerLogic_State_Alive_Falling --> Vardag_PlayerLogic_State_Alive_Grounded : CheckGrounded
+Vardag_PlayerLogic_State_Alive_Grounded --> Vardag_PlayerLogic_State_Alive_Falling : CheckGrounded
+Vardag_PlayerLogic_State_Alive_Grounded --> Vardag_PlayerLogic_State_Alive_Grounded : CheckGrounded
+Vardag_PlayerLogic_State_Alive_Grounded --> Vardag_PlayerLogic_State_Alive_Grounded : RequestMove
 
 Vardag_PlayerLogic_State : OnPhysicsTick → Move, UpdateVelocity
 Vardag_PlayerLogic_State : OnRequestLook → Look
+Vardag_PlayerLogic_State_Alive_Falling : OnPhysicsTick → UpdateVelocity
+Vardag_PlayerLogic_State_Alive_Grounded : OnEnter → UpdateVelocity
 
-[*] --> Vardag_PlayerLogic_State
+[*] --> Vardag_PlayerLogic_State_Alive_Grounded_Idle
 @enduml

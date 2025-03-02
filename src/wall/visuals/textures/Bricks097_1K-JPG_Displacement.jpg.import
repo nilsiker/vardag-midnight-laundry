@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cv8q4i3hrnhxv"
-path="res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"
+uid="uid://bcvhqemp10vg"
+path="res://.godot/imported/Bricks097_1K-JPG_Displacement.jpg-c5ed566cfd4bb63a46fa60d1d265a84f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icon.png"
-dest_files=["res://.godot/imported/icon.png-487276ed1e3a0c39cad0279d744ee560.ctex"]
+source_file="res://src/wall/visuals/textures/Bricks097_1K-JPG_Displacement.jpg"
+dest_files=["res://.godot/imported/Bricks097_1K-JPG_Displacement.jpg-c5ed566cfd4bb63a46fa60d1d265a84f.ctex"]
 
 [params]
 

@@ -1,0 +1,4 @@
+@startuml PlayerCameraLogic
+state "PlayerCameraLogic State" as Vardag_PlayerCameraLogic_State
+[*] --> Vardag_PlayerCameraLogic_State
+@enduml

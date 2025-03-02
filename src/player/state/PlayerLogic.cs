@@ -10,5 +10,5 @@ public interface IPlayerLogic : ILogicBlock<PlayerLogic.State>;
 public partial class PlayerLogic
   : LogicBlock<PlayerLogic.State>,
     IPlayerLogic {
-  public override Transition GetInitialState() => To<State>();
+  public override Transition GetInitialState() => To<State.Alive.Grounded.Idle>();
 }
