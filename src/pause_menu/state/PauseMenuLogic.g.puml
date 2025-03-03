@@ -1,5 +1,9 @@
 @startuml PauseMenuLogic
 state "PauseMenuLogic State" as Vardag_PauseMenuLogic_State
+
+Vardag_PauseMenuLogic_State --> Vardag_PauseMenuLogic_State : OnQuitPressed
+Vardag_PauseMenuLogic_State --> Vardag_PauseMenuLogic_State : OnResumePressed
+
 Vardag_PauseMenuLogic_State : OnGamePausedSync() → UpdateVisibility
 
 [*] --> Vardag_PauseMenuLogic_State

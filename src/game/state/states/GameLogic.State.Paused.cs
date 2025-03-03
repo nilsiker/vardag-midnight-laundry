@@ -6,21 +6,20 @@ public partial class GameLogic {
   public partial record State {
     public partial record Paused : State, IGet<Input.OnPausePressed> {
       public Paused() {
-        OnAttach(() => { });
-        OnDetach(() => { });
+        OnAttach(() => Get<IGameRepo>().Paused.Changed += OnGamePausedChanged);
+        OnDetach(() => Get<IGameRepo>().Paused.Changed -= OnGamePausedChanged);
 
-        this.OnEnter(() => {
-          Get<IGameRepo>().Pause();
-          Output(new Output.Pause());
-        });
-
-        this.OnExit(() => {
-          Get<IGameRepo>().Resume();
-          Output(new Output.Resume());
-        });
+        this.OnEnter(() => Get<IGameRepo>().Pause());
+        this.OnExit(() => Get<IGameRepo>().Resume());
       }
 
       public Transition On(in Input.OnPausePressed input) => To<Playing>();
+      private void OnGamePausedChanged(bool paused) {
+        if (!paused) {
+          Input(new Input.OnPausePressed());
+        }
+      }
+
     }
   }
 }

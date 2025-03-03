@@ -48,6 +48,5 @@ public partial class StateDebugDisplay : HBoxContainer {
         _index = Math.Max(0, _index - 1);
       }
     }
-    GD.Print(_index);
   }
 }

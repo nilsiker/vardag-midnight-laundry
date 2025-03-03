@@ -1,5 +1,6 @@
 namespace Vardag;
 
+using System;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
@@ -44,8 +45,9 @@ public partial class Game : CanvasLayer, IGame {
 
     // Bind functions to state outputs here
     Binding
-      .Handle((in GameLogic.Output.Pause _) => OnOutputPause())
-      .Handle((in GameLogic.Output.Resume _) => OnOutputResume());
+      .Handle((in GameLogic.Output.CaptureMouse output) => OnOutputCaptureMouse(output.Captured))
+      .Handle((in GameLogic.Output.SetPauseMode output) => OnOutputSetPauseMode(output.Paused))
+      .Handle((in GameLogic.Output.QuitGame _) => OnOutputQuitGame());
 
     Logic.Set(GameRepo);
     Logic.Start();
@@ -53,6 +55,8 @@ public partial class Game : CanvasLayer, IGame {
     this.Provide();
   }
   #endregion
+
+
 
   #region Godot Lifecycle
   public override void _Notification(int what) => this.Notify(what);
@@ -84,14 +88,13 @@ public partial class Game : CanvasLayer, IGame {
   #endregion
 
   #region Output Callbacks
-  private static void OnOutputPause() {
-    Engine.TimeScale = 0f;
-    Input.MouseMode = Input.MouseModeEnum.Visible;
-  }
+  private static void OnOutputCaptureMouse(bool captured) =>
+    Input.MouseMode = captured
+      ? Input.MouseModeEnum.Captured
+      : Input.MouseModeEnum.Visible;
 
-  private static void OnOutputResume() {
-    Engine.TimeScale = 1f;
-    Input.MouseMode = Input.MouseModeEnum.Captured;
-  }
+  private static void OnOutputSetPauseMode(bool paused) => Engine.TimeScale = paused ? 0f : 1f;
+  private void OnOutputQuitGame() => GetTree().Quit();
+
   #endregion
 }

@@ -7,8 +7,8 @@ state "GameLogic State" as Vardag_GameLogic_State {
 Vardag_GameLogic_State_Paused --> Vardag_GameLogic_State_Playing : OnPausePressed
 Vardag_GameLogic_State_Playing --> Vardag_GameLogic_State_Paused : OnPausePressed
 
-Vardag_GameLogic_State_Paused : OnEnter → Pause
-Vardag_GameLogic_State_Paused : OnExit → Resume
+Vardag_GameLogic_State : OnGamePausedSync() → CaptureMouse, SetPauseMode
+Vardag_GameLogic_State : OnGameQuitRequested() → QuitGame
 
 [*] --> Vardag_GameLogic_State_Playing
 @enduml

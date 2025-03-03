@@ -14,6 +14,9 @@ public partial class PauseMenu : Control, IPauseMenu {
   #endregion
 
   #region Nodes
+  [Node] private Button ResumeButton { get; set; } = default!;
+  [Node] private Button OptionsButton { get; set; } = default!;
+  [Node] private Button QuitButton { get; set; } = default!;
   #endregion
 
   #region Provisions
@@ -42,10 +45,7 @@ public partial class PauseMenu : Control, IPauseMenu {
     Logic.Start();
   }
 
-  private void OnOutputUpdateVisibility(bool visible) {
-    Visible = visible;
-    GD.Print(visible);
-  }
+  private void OnOutputUpdateVisibility(bool visible) => Visible = visible;
   #endregion
 
   #region Godot Lifecycle
@@ -54,7 +54,11 @@ public partial class PauseMenu : Control, IPauseMenu {
   public void OnReady() {
     SetProcess(true);
     SetPhysicsProcess(true);
+
+    ResumeButton.Pressed += OnResumeButtonPressed;
+    QuitButton.Pressed += OnQuitButtonPressed;
   }
+
 
   public void OnProcess(double delta) { }
 
@@ -67,7 +71,10 @@ public partial class PauseMenu : Control, IPauseMenu {
   #endregion
 
   #region Input Callbacks
+  private void OnResumeButtonPressed() => Logic.Input(new PauseMenuLogic.Input.OnResumePressed());
+  private void OnQuitButtonPressed() => Logic.Input(new PauseMenuLogic.Input.OnQuitPressed());
   #endregion
+
 
   #region Output Callbacks
   #endregion
