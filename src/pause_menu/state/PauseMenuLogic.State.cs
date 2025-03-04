@@ -16,7 +16,7 @@ public partial class PauseMenuLogic {
     }
 
     public Transition On(in Input.OnResumePressed input) {
-      Get<IGameRepo>().Resume();
+      Get<IGameRepo>().Play();
       return ToSelf();
     }
 

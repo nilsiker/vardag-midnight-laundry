@@ -11,7 +11,7 @@ public interface IGameRepo {
 
   public void RequestQuit();
   public void Pause();
-  public void Resume();
+  public void Play();
 }
 
 public class GameRepo : IGameRepo, IDisposable {
@@ -21,7 +21,7 @@ public class GameRepo : IGameRepo, IDisposable {
 
   public void RequestQuit() => QuitRequested?.Invoke();
   public void Pause() => _paused.OnNext(true);
-  public void Resume() => _paused.OnNext(false);
+  public void Play() => _paused.OnNext(false);
 
   public void Dispose() {
     QuitRequested = null;

@@ -1,7 +1,6 @@
 namespace Vardag;
 
 using Chickensoft.LogicBlocks;
-using Godot;
 
 
 public partial class GameLogic {

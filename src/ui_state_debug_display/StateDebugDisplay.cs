@@ -18,9 +18,7 @@ public partial class StateDebugDisplay : HBoxContainer {
 
   private IEnumerable<IStateInfo> NodesInStateGroup => GetTree().GetNodesInGroup("state").OfType<IStateInfo>();
 
-  public override void _Ready() {
-
-  }
+  public override void _Ready() { }
 
   // Called every frame. 'delta' is the elapsed time since the previous frame.
   public override void _Process(double delta) {
@@ -33,7 +31,6 @@ public partial class StateDebugDisplay : HBoxContainer {
     _.EntityName.Text = NodesInStateGroup.ElementAtOrDefault(_index)?.Name;
     _.EntityState.Text = NodesInStateGroup.ElementAtOrDefault(_index)?.State;
   }
-
 
   public override void _Input(InputEvent @event) {
     if (@event.IsReleased()) {

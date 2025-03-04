@@ -45,6 +45,7 @@ public partial class Game : CanvasLayer, IGame {
 
     // Bind functions to state outputs here
     Binding
+      .When<GameLogic.State>(state => GD.Print(state.ToString()))
       .Handle((in GameLogic.Output.CaptureMouse output) => OnOutputCaptureMouse(output.Captured))
       .Handle((in GameLogic.Output.SetPauseMode output) => OnOutputSetPauseMode(output.Paused))
       .Handle((in GameLogic.Output.QuitGame _) => OnOutputQuitGame());

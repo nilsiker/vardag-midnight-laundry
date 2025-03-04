@@ -10,10 +10,10 @@ public partial class GameLogic {
         OnDetach(() => Get<IGameRepo>().Paused.Changed -= OnGamePausedChanged);
 
         this.OnEnter(() => Get<IGameRepo>().Pause());
-        this.OnExit(() => Get<IGameRepo>().Resume());
       }
 
       public Transition On(in Input.OnPausePressed input) => To<Playing>();
+
       private void OnGamePausedChanged(bool paused) {
         if (!paused) {
           Input(new Input.OnPausePressed());

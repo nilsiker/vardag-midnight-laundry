@@ -17,6 +17,7 @@ public partial class PauseMenu : Control, IPauseMenu {
   [Node] private Button ResumeButton { get; set; } = default!;
   [Node] private Button OptionsButton { get; set; } = default!;
   [Node] private Button QuitButton { get; set; } = default!;
+  [Node] private Control OptionsPanel { get; set; } = default!;
   #endregion
 
   #region Provisions
@@ -56,6 +57,7 @@ public partial class PauseMenu : Control, IPauseMenu {
     SetPhysicsProcess(true);
 
     ResumeButton.Pressed += OnResumeButtonPressed;
+    OptionsButton.Pressed += () => OptionsPanel.Visible = true;
     QuitButton.Pressed += OnQuitButtonPressed;
   }
 
